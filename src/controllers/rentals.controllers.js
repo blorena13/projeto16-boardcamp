@@ -86,11 +86,10 @@ export async function finalRentals(req, res) {
         const delayFee = Math.max(0, delayInDays) * gamePricePerDay;
 
         await db.query(`
-        UPDATE rentals 
-        SET "returnDate"=$1, "delayFee"=$2 
-        WHERE id=$3
-        RETURNING *;
-        ;`, [returnDate, delayFee, id]);
+        UPDATE rentals
+        SET "returnDate" = $1, "delayFee" = $2
+        WHERE id = $3;
+`, [returnDate, delayFee, id]);
 
         return res.sendStatus(200);
 
