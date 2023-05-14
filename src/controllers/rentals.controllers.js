@@ -9,16 +9,17 @@ export async function getRentals(req, res) {
             JOIN customers ON customers.id = rentals."customerId"
             JOIN games ON games.id = rentals."gameId";`);
 
-        const finalRentals = {
-            ...rentals.rows[0],
-            customer: rentals.rows.map(rec => ({id: rec.customersId , name: rec.customersName})),
-            game: rentals.rows.map(rec => ({id: rec.gamesId, name: rec.gamesName}))
-        }
-        delete finalRentals.gamesName;
-        delete finalRentals.customersName;
-        delete finalRentals.customersId;
-        delete finalRentals.gamesId;
-        res.send(finalRentals);
+
+        const finalRentals = rentals.rows.map(rec => {
+            const { gamesName, customersName, customersId, gamesId, ...rest } = rec;
+            return {
+              ...rest,
+              customer: { id: customersId, name: customersName },
+              game: { id: gamesId, name: gamesName }
+            };
+          });
+          
+          res.send(finalRentals);
 
     } catch (err) {
         res.status(500).send(err.message);
