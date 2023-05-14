@@ -28,6 +28,10 @@ export async function getRentals(req, res) {
 
 export async function postRentals(req, res) {
     const { customerId, gameId, daysRented } = req.body;
+
+    if(daysRented <=0){
+        return res.sendStatus(400);
+    }
     try {
         const customerExists = await db.query(`SELECT * FROM customers WHERE id =$1;`, [customerId]);
         if(customerExists.rows.length === 0){
