@@ -67,7 +67,7 @@ export async function postRentals(req, res) {
 export async function finalRentals(req, res) {
     const { id } = req.params;
     try {
-        const rental = await db.query(`SELECT *FROM rentals WHERE id-$1`, [id]);
+        const rental = await db.query(`SELECT *FROM rentals WHERE id=$1;`, [id]);
         if (rental.rows.length === 0) {
             return res.sendStatus(404);
         }
@@ -85,8 +85,8 @@ export async function finalRentals(req, res) {
         const delayInDays = Math.ceil((returnDate - rentDate) / (1000 * 60 * 60 * 24)) - daysRented;
         const delayFee = Math.max(0, delayInDays) * gamePricePerDay;
 
-        await db.query(`UPDATE rentals SET "returnDate"=$1, "delayFee"=$2 WHERE id=$3`, [returnDate, delayFee, id]);
-        return rentDate.sendStatus(200);
+        await db.query(`UPDATE rentals SET "returnDate"=$1, "delayFee"=$2 WHERE id=$3;`, [returnDate, delayFee, id]);
+        return res.sendStatus(200);
 
     } catch (err) {
         res.status(500).send(err.message);
