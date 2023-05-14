@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/blorena13/projeto16-boardcamp#readme",
   "dependencies": {
+    "@joi/date": "^2.1.0",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
