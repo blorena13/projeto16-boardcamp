@@ -77,7 +77,12 @@ export async function finalRentals(req, res) {
             return res.sendStatus(400);
         }
 
-        const returnDate = new Date();
+        const createDate = new Date();
+        const year = createDate.getFullYear();
+        const month = String(createDate.getMonth()+1).padStart(2, '0');
+        const day = String(createDate.getDate()).padStart(2, '0');
+        const returnDate = `${year}/${month}/${day}`;
+        
         const rentDate = existingRental.rentDate;
         const daysRented = existingRental.daysRented;
         const gamePricePerDay = existingRental.gamePricePerDay;
@@ -104,7 +109,7 @@ export async function deleteRentals(req, res) {
     try {
         const idExists = await db.query(`SELECT * FROM rentals WHERE id=$1;`, [id]);
         if (idExists.rows.length === 0) {
-            return res.status(404).send("Id não existe.")
+            return res.sendStatus(404);
         }
 
         const existingRental = rental.rows[0];
